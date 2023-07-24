@@ -105,7 +105,9 @@ class App(ttkthemes.ThemedTk):
         data = img2.tobytes()
         self.packq = pack_mapqf.MapQuizPackFile(mode=mode, size=size, data=data)
 
+
         py_image = pygame.image.fromstring(data, size, mode).convert_alpha()
+
         screen.blit(py_image, (250, 250))
 
         pygame.display.update()
@@ -114,7 +116,9 @@ class App(ttkthemes.ThemedTk):
         def on_exit(event=0):
             global running
             running = False
+
             self.destroy()
+
             pygame.quit()
 
         self.protocol('WM_DELETE_WINDOW', on_exit)
@@ -132,6 +136,7 @@ class App(ttkthemes.ThemedTk):
                         n = simpledialog.askstring('Entry obj', "entry obj's name pls")
                         if n == '':
                             continue
+
                         if not n in self.labels.values():
                             self.labels[event.pos] = n
                         self.labels_val = list(self.labels.values())
@@ -165,6 +170,7 @@ class App(ttkthemes.ThemedTk):
                 new_dict[k] = self.labels[k]
         self.labels = new_dict
         self.labels_val = list(self.labels.values())
+
     def open_and_modify_quiz(self, event=None):
         fn = filedialog.askopenfilename(filetypes=(('FotonTestSystem23 Quiz v2', '*.fts23v2'),))
         if not fn:
