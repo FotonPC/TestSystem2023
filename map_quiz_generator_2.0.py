@@ -55,7 +55,7 @@ class App(ttkthemes.ThemedTk):
         self.entry_title.pack(fill='x')
         self.tnxtxt_label = ttk.Label(self.toolquiz_frame, text='Thanks for passed quiz')
         self.tnxtxt_label.pack()
-        self.tnxtxt_text = tk.Text(self.toolquiz_frame)
+        self.tnxtxt_text = tk.Text(self.toolquiz_frame, font='TkDefaultFont')
         self.tnxtxt_text.pack(fill='both', expand=True)
         self.sett_tab = ttk.Frame(self.notebook)
         self.sett_tab.pack(fill='both', expand=1)
