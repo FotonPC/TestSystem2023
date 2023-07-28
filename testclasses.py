@@ -4,13 +4,12 @@ import tkinter.messagebox
 from tkinter import ttk
 import ttkthemes
 from PIL import Image, ImageTk
-import testquestions
 import random
 import pygame
 pygame.init()
 
 class TNABaseUG(ttk.LabelFrame):
-    def __init__(self, master=None, equals=None):
+    def __init__(self, master=None, equals=None, close_handle=None):
 
         if equals == None:
             self.equals = {"WTF":"WTF"}
@@ -44,11 +43,14 @@ class TNABaseUG(ttk.LabelFrame):
         self.missed_els = [i for i in range(len(self.keys))]
         self.rightn=0
         self.clicks = 0
-
+        self.close_handle = close_handle
     def start(self):
         self.rightn=random.choice(self.missed_els)
         self.missed_els.remove(self.rightn)
         self.text.config(text=str(self.keys[self.rightn]))
+    def close(self):
+        self.destroy()
+        self.close_handle()
     def select(self, event=None, a=None, ind=0):
         self.clicks += 1
         print(ind)
@@ -75,7 +77,7 @@ class TNABaseUG(ttk.LabelFrame):
 
 
 class MAPQuiZ(ttk.Frame):
-    def __init__(self, master=None,  packq=None, root=None):
+    def __init__(self, master=None,  packq=None, root=None, close_handle=None):
 
         super().__init__(master)
         self.packq =packq
@@ -85,7 +87,6 @@ class MAPQuiZ(ttk.Frame):
         self.keys=[]
         self.values = []
         self.style = ttkthemes.ThemedStyle()
-        self.style.configure('secret.TLabel', font='Arial 15')
         self.style.configure('TButton', font='Arial 8')
         self.style.configure('std.TButton', background='gray')
         self.style.configure('correct.TButton', background='green')
@@ -96,14 +97,18 @@ class MAPQuiZ(ttk.Frame):
             self.keys.append(self.labels[pos])
             self.values.append(pos)
         width, height = packq.size
-        self.qframe = ttk.Frame(self)
-        self.qframe.pack(fill='x', expand=1)
+        self.qframe = ttk.Frame(self, height=80)
+        self.qframe.pack(fill='x')
+        self.title_label = ttk.Label(self.qframe, text=self.packq.title)
+        self.title_label.place(relx=0, rely=0, relwidth=0.5, relheight=0.2, anchor='nw')
         self.text = ttk.Label(self.qframe, text='Where is ?', style='topic.TLabel')
-        self.text.pack(expand=1)
-        self.mapframe = ttk.Frame(self, width=width+60, height=height+60)
+        self.text.place(relx=0, rely=0.2, anchor='nw', relwidth=0.5, relheight=0.8)
+        self.butt_close = ttk.Button(self.qframe, text='Закрыть тест X', command=self.close)
+        self.butt_close.place(relx=0.5, rely=0, relwidth=0.5, relheight=1, anchor='nw')
+        self.mapframe = ttk.Frame(self, width=width+60, height=height+10)
         self.mapframe.pack()
         self.embed = tk.Frame(self.mapframe, width=width, height=height)  # creates embed frame for pygame window
-        self.embed.place(x=30, y=30, width=width, height=height, anchor='nw')  # Adds grid
+        self.embed.place(x=0, y=0, width=width, height=height, anchor='nw')  # Adds grid
         os.environ['SDL_WINDOWID'] = str(self.embed.winfo_id())
         os.environ['SDL_VIDEODRIVER'] = 'windib'
         pygame.init()
@@ -125,11 +130,12 @@ class MAPQuiZ(ttk.Frame):
         for val in self.values:
             self.buttons.append(ttk.Button(self.mapframe, text='', style='std.TButton',
                                            command=lambda event=None, index=i: self.select(ind=index), width=1))
-            self.buttons[-1].place(x=val[0]+30, y=val[1]+30)
+            self.buttons[-1].place(x=val[0], y=val[1])
             i += 1
         self.missed_els = [i for i in range(len(self.keys))]
         self.rightn = 0
         self.clicks = 0
+        self.close_handle = close_handle
 
     def start(self):
         self.rightn = random.choice(self.missed_els)
@@ -180,3 +186,12 @@ class MAPQuiZ(ttk.Frame):
     def draw_markers(self):
         for val in self.values:
             pygame.draw.circle(self.screen, (255, 0, 0), val, 4, 2)
+
+    def close(self, event=None):
+        try:
+            pygame.quit()
+        except:
+            pass
+        self.destroy()
+        self.close_handle()
+
