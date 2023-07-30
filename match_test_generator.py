@@ -81,6 +81,7 @@ class App(ttkthemes.ThemedTk):
         self.set_theme(self.settings_pack.theme)
         self.title(self.settings_pack.title)
         self.settings_pack.tests_lib = set(self.settings_pack.tests_lib)
+
     def init_test_tab(self):
         self.tab_test = ttk.Frame(self.notebook)
         self.tab_test.pack(fill='both', expand=1)
@@ -120,14 +121,80 @@ class App(ttkthemes.ThemedTk):
         self.tab_test_butt_i_pairs.place(relx=0.5, rely=0, anchor='nw', relwidth=0.5, relheight=1)
         self.tab_test_lf_el = ttk.LabelFrame(self.tab_test_paned, text='Редактор элемента')
         self.tab_test_paned.add(self.tab_test_lf_el, weight=1)
-        self.tab_test_el_example_butt_1 = ttk.Button(self.tab_test_lf_el, text='Пример', style='example.TButton')
-        self.tab_test_el_example_butt_1.grid(row=0, column=0, padx=20, pady=20, ipadx=20, ipady=20)
-        self.tab_test_el_example_butt_2 = ttk.Button(self.tab_test_lf_el, text='Пример', style='example.TButton')
-        self.tab_test_el_example_butt_2.grid(row=1, column=0, padx=20, pady=20, ipadx=20, ipady=20)
-        self.tab_test_el_example_lab = ttk.Label(self.tab_test_lf_el, text='Пример', style='example.TLabel')
-        self.tab_test_el_example_lab.grid(row=1, column=0, sticky='se')
+        self.tab_test_el_paned = ttk.PanedWindow(self.tab_test_lf_el, orient=tk.VERTICAL)
+        self.tab_test_el_paned.pack(fill='both', expand=1)
+        self.tab_test_lf_examples = ttk.LabelFrame(self.tab_test_lf_el, text='Примеры')
+        self.tab_test_el_paned.add(self.tab_test_lf_examples, weight=1)
 
+        self.tab_test_el_example_butt_1 = ttk.Button(self.tab_test_lf_examples, text='Пример', style='example.TButton')
+        self.tab_test_el_example_butt_1.grid(row=0, column=0)
+        self.tab_test_el_example_butt_2 = ttk.Button(self.tab_test_lf_examples, text='Пример', style='example.TButton')
+        self.tab_test_el_example_butt_2.grid(row=0, column=1)
+        self.tab_test_el_example_lab = ttk.Label(self.tab_test_lf_examples, text='Пример', style='example.TLabel')
+        self.tab_test_el_example_lab.grid(row=0, column=1, sticky='se')
 
+        self.tab_test_paned_el = ttk.PanedWindow(self.tab_test_lf_el, orient=tk.HORIZONTAL)
+        self.tab_test_el_paned.add(self.tab_test_paned_el, weight=1)
+        self.tab_test_el_lf_button = ttk.LabelFrame(self.tab_test_paned_el, text='Редактор кнопки')
+        self.tab_test_paned_el.add(self.tab_test_el_lf_button, weight=1)
+        ################ init button lf el ####################
+        """
+        # ============= Label + Spinbox pair ============== #
+        self.tab_test_el_lf_button_label = ttk.Label(self.tab_test_el_lf_button, text='param:')
+        self.tab_test_el_lf_button_label.grid(row=0, column=0)
+        self.tab_test_el_lf_button_spinbox = ttk.Spinbox(self.tab_test_el_lf_button, from_=0, to=100)
+        self.tab_test_el_lf_button_spinbox.grid(row=0, column=1)
+        """
+        # ============= Entry + Button ============== # -- FONT
+        pass
+        # ============= Label + Spinbox pair ============== # --- WIDTH
+        self.tab_test_el_lf_button_label_width = ttk.Label(self.tab_test_el_lf_button, text='width=')
+        self.tab_test_el_lf_button_label_width.grid(row=1, column=0)
+        self.tab_test_el_lf_button_spinbox_width = ttk.Spinbox(self.tab_test_el_lf_button, from_=0, to=100, command=self.set_spinboxes_button)
+        self.tab_test_el_lf_button_spinbox_width.set(0)
+        self.tab_test_el_lf_button_spinbox_width.grid(row=1, column=1)
+        # ============= Label + Spinbox pair ============== # --- IPADX
+        self.tab_test_el_lf_button_label_ipadx = ttk.Label(self.tab_test_el_lf_button, text='ipadx=')
+        self.tab_test_el_lf_button_label_ipadx.grid(row=3, column=0)
+        self.tab_test_el_lf_button_spinbox_ipadx = ttk.Spinbox(self.tab_test_el_lf_button, from_=0, to=100, command=self.set_spinboxes_button)
+        self.tab_test_el_lf_button_spinbox_ipadx.set(0)
+        self.tab_test_el_lf_button_spinbox_ipadx.grid(row=3, column=1)
+        # ============= Label + Spinbox pair ============== # --- IPADY
+        self.tab_test_el_lf_button_label_ipady = ttk.Label(self.tab_test_el_lf_button, text='ipady=')
+        self.tab_test_el_lf_button_label_ipady.grid(row=4, column=0)
+        self.tab_test_el_lf_button_spinbox_ipady = ttk.Spinbox(self.tab_test_el_lf_button, from_=0, to=100, command=self.set_spinboxes_button)
+        self.tab_test_el_lf_button_spinbox_ipady.set(0)
+        self.tab_test_el_lf_button_spinbox_ipady.grid(row=4, column=1)
+        # ============= Label + Spinbox pair ============== # --- PADX
+        self.tab_test_el_lf_button_label_padx = ttk.Label(self.tab_test_el_lf_button, text='padx=')
+        self.tab_test_el_lf_button_label_padx.grid(row=5, column=0)
+        self.tab_test_el_lf_button_spinbox_padx = ttk.Spinbox(self.tab_test_el_lf_button, from_=0, to=100, command=self.set_spinboxes_button)
+        self.tab_test_el_lf_button_spinbox_padx.set(0)
+        self.tab_test_el_lf_button_spinbox_padx.grid(row=5, column=1)
+        # ============= Label + Spinbox pair ============== # --- PADY
+        self.tab_test_el_lf_button_label_pady = ttk.Label(self.tab_test_el_lf_button, text='pady=')
+        self.tab_test_el_lf_button_label_pady.grid(row=6, column=0)
+        self.tab_test_el_lf_button_spinbox_pady = ttk.Spinbox(self.tab_test_el_lf_button, from_=0, to=100, command=self.set_spinboxes_button)
+        self.tab_test_el_lf_button_spinbox_pady.set(0)
+        self.tab_test_el_lf_button_spinbox_pady.grid(row=6, column=1)
+        # ============= Label + Spinbox pair ============== # --- STICKY
+        self.tab_test_el_lf_button_label_sticky= ttk.Label(self.tab_test_el_lf_button, text='sticky=')
+        self.tab_test_el_lf_button_label_sticky.grid(row=7, column=0)
+        self.tab_test_el_lf_button_spinbox_sticky = ttk.Spinbox(self.tab_test_el_lf_button, command=self.set_spinboxes_button, values=['', 'n', 's', 'e', 'w', 'nw', 'ne', 'sw', 'se', 'ns', 'we', 'nse', 'nws', 'wes', 'wen', 'nsew'])
+        self.tab_test_el_lf_button_spinbox_sticky.set('')
+        self.tab_test_el_lf_button_spinbox_sticky.grid(row=7, column=1)
+        self.tab_test_el_lf_label = ttk.LabelFrame(self.tab_test_paned_el, text='Редактор подписи')
+        self.tab_test_paned_el.add(self.tab_test_el_lf_label, weight=1)
+
+    def set_spinboxes_button(self, event=None):
+        self.tab_test_el_example_butt_1.grid(column=0, row=0,
+                                             ipadx=self.tab_test_el_lf_button_spinbox_ipadx.get(),
+                                             ipady=self.tab_test_el_lf_button_spinbox_ipady.get(),
+                                             padx=self.tab_test_el_lf_button_spinbox_padx.get(),
+                                             pady=self.tab_test_el_lf_button_spinbox_pady.get(),
+                                             sticky=self.tab_test_el_lf_button_spinbox_sticky.get(),
+                                             )
+        self.tab_test_el_example_butt_1.config(width=self.tab_test_el_lf_button_spinbox_width.get())
     def commit_settings(self, event=None):
         with open(self.filename_settings, 'wb') as file:
             pickle.dump(self.settings_pack, file)
@@ -143,8 +210,8 @@ class App(ttkthemes.ThemedTk):
         self.tab_file_vnotebook.pack(fill='both', expand=1)
         self.tab_file_tab_recent = ttk.Frame(self.tab_file_vnotebook)
         self.tab_file_tab_recent.pack(fill='both', expand=1)
-        self.tab_file_vnotebook.add(self.tab_file_tab_recent, text=' Последнее ', padding=2,)
-        self.id_recent=0
+        self.tab_file_vnotebook.add(self.tab_file_tab_recent, text=' Последнее ', padding=2, )
+        self.id_recent = 0
         self.update_recent_tab()
         self.tab_file_tab_lib = ttk.Frame(self.tab_file_vnotebook)
         self.tab_file_tab_lib.pack(fill='both', expand=1)
@@ -163,19 +230,27 @@ class App(ttkthemes.ThemedTk):
         self.tab_file_tab_open.pack(fill='both', expand=1)
         self.tab_file_vnotebook.add(self.tab_file_tab_open, text='  Открыть  ', padding=2)
         self.init_tab_file_open_tab()
+
     def init_tab_file_open_tab(self):
-        self.tab_file_tab_open_butt_open = ttk.Button(self.tab_file_tab_open, text='Открыть файл в проводнике Windows ...')
+        self.tab_file_tab_open_butt_open = ttk.Button(self.tab_file_tab_open,
+                                                      text='Открыть файл в проводнике Windows ...')
         self.tab_file_tab_open_butt_open.grid(row=0, column=0, ipadx=10, ipady=15, padx=10, pady=10, sticky='nsew')
         self.tab_file_tab_open_butt_lib = ttk.Button(self.tab_file_tab_open,
-                                                      text='Открыть в библиотеке тестов ...', command=lambda e=None: self.tab_file_vnotebook.select(self.id_lib))
+                                                     text='Открыть в библиотеке тестов ...',
+                                                     command=lambda e=None: self.tab_file_vnotebook.select(self.id_lib))
         self.tab_file_tab_open_butt_lib.grid(row=1, column=0, ipadx=10, ipady=15, padx=10, pady=10, sticky='nsew')
         self.tab_file_tab_open_butt_rec = ttk.Button(self.tab_file_tab_open,
-                                                      text='Последние файлы ...', command=lambda e=None: (self.tab_file_vnotebook.select(self.id_recent), print(self.id_recent)))
+                                                     text='Последние файлы ...', command=lambda e=None: (
+            self.tab_file_vnotebook.select(self.id_recent), print(self.id_recent)))
         self.tab_file_tab_open_butt_rec.grid(row=2, column=0, ipadx=10, ipady=15, padx=10, pady=10, sticky='nsew')
+
     def init_tab_file_create_tab(self):
-        self.tab_file_tab_create_butt_create = ttk.Button(self.tab_file_tab_create, text='Создать новый пустой тест на соответствие элементов', command=self.fontchoose)
+        self.tab_file_tab_create_butt_create = ttk.Button(self.tab_file_tab_create,
+                                                          text='Создать новый пустой тест на соответствие элементов',
+                                                          command=self.fontchoose)
         self.tab_file_tab_create_butt_create.grid(row=0, column=0, ipadx=10, ipady=15,
-                                                padx=10, pady=10)
+                                                  padx=10, pady=10)
+
     def init_tab_file_save_tab(self):
         self.tab_file_tab_save_entry = ttk.Entry(self.tab_file_tab_save, width=100)
         self.tab_file_tab_save_entry.grid(row=0, column=0, sticky='e', padx=[10, 0], pady=10, ipadx=10, ipady=15)
@@ -183,7 +258,8 @@ class App(ttkthemes.ThemedTk):
         self.tab_file_tab_save_butt_se.grid(row=0, column=1, sticky='w', padx=[0, 10], pady=10, ipadx=10, ipady=15)
         self.tab_file_tab_save_butt_saveas = ttk.Button(self.tab_file_tab_save,
                                                         text='Сохранить как ... в проводнике Windows')
-        self.tab_file_tab_save_butt_saveas.grid(row=1, column=0, columnspan=2, sticky='nsew', ipadx=10, ipady=15, padx=10, pady=10)
+        self.tab_file_tab_save_butt_saveas.grid(row=1, column=0, columnspan=2, sticky='nsew', ipadx=10, ipady=15,
+                                                padx=10, pady=10)
 
     def init_tab_file_lib_tab(self):
         self.tab_file_tab_lib_tool_frame = ttk.Frame(self.tab_file_tab_lib, height=50)
@@ -236,7 +312,8 @@ class App(ttkthemes.ThemedTk):
                 self.tab_file_tab_recent_list_of_labels.append(
                     ttk.Label(self.tab_file_tab_recent_list_of_labels[-2], text=file))
                 self.tab_file_tab_recent_list_of_labels[-1].place(relx=1, rely=1, anchor='se')
-                self.tab_file_tab_recent_list_of_labels.append(ttk.Button(self.tab_file_tab_recent_list_of_labels[-3], text='Добавить в библиотеку'))
+                self.tab_file_tab_recent_list_of_labels.append(
+                    ttk.Button(self.tab_file_tab_recent_list_of_labels[-3], text='Добавить в библиотеку'))
                 self.tab_file_tab_recent_list_of_labels[-1].place(relx=1, rely=0.5, anchor='e')
             except:
                 pass
@@ -251,7 +328,8 @@ class App(ttkthemes.ThemedTk):
         self.notebook.add(self.settings_tab, text='Настройки')
         ttk.Label(self.settings_tab, text='Тема:').grid(row=0, column=0, ipadx=10, ipady=15, padx=10, pady=10)
         self.settings_tab_combo_theme = ttk.Combobox(self.settings_tab, values=self.style.get_themes())
-        self.settings_tab_combo_theme.grid(row=0, column=1, columnspan=2, ipadx=10, ipady=15, padx=10, pady=10, sticky='we')
+        self.settings_tab_combo_theme.grid(row=0, column=1, columnspan=2, ipadx=10, ipady=15, padx=10, pady=10,
+                                           sticky='we')
         self.settings_tab_combo_theme.bind("<<ComboboxSelected>>", self.select_theme)
         ttk.Label(self.settings_tab, text='Название:').grid(row=1, column=0, ipadx=10, ipady=15, padx=10, pady=10)
         self.settings_tab_entry_title = ttk.Entry(self.settings_tab, width=len(self.settings_pack.title) + 5)
@@ -278,12 +356,13 @@ class App(ttkthemes.ThemedTk):
         if default_font is None:
             default_font = 'TkDefaultFont'
         self.__font_from_font_chooser = 'TkDefaultFont'
+
         def font_changed(font):
             self.__font_from_font_chooser = font
 
-        self.tk.call('tk', 'fontchooser', 'configure','-font', default_font, '-command', self.register(font_changed))
+        self.tk.call('tk', 'fontchooser', 'configure', '-font', default_font, '-command', self.register(font_changed))
         self.tk.call('tk', 'fontchooser', 'show')
-        print('choosed',self.__font_from_font_chooser)
+        print('choosed', self.__font_from_font_chooser)
         return self.__font_from_font_chooser
 
 
