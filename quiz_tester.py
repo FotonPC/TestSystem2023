@@ -128,6 +128,14 @@ class App(ttkthemes.ThemedTk):
                 self.test.start()
             except:
                 msgbox.showerror('Ошибка', 'Ошибка при создании теста, видимо данные упакованы не в том формате')
+        elif filename.endswith('.fts23m'):
+            try:
+                self.test = testclasses.TNABaseUG(self.mainframe, packq=pack, root=self, close_handle=self.on_close_test)
+                self.test.place(relx=0, rely=0, anchor='nw', relheight=1, relwidth=1)
+                self.test.start()
+            except:
+                msgbox.showerror('Ошибка', 'Ошибка при создании теста, видимо данные упакованы не в том формате')
+
     def commit_settings(self, event=None):
         with open(self.filename_settings, 'wb') as file:
             pickle.dump(self.settings_pack, file)

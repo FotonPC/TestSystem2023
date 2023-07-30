@@ -195,3 +195,32 @@ class MAPQuiZ(ttk.Frame):
         self.destroy()
         self.close_handle()
 
+
+class MatchTestPack:
+    def __init__(self, title='', keys=None, values=None, thanks_text='', size_grid = None, size_button = None, size_label=None, font_button='TkDefaultFont', font_label='TkDefaultFont', grid_label = None, grid_button=None, ):
+        if keys is None:
+            keys = []
+        if values is None:
+            values = []
+        if size_button is None:
+            size_button = dict()
+        if size_label is None:
+            size_label = dict()
+        if grid_label is None:
+            grid_label = dict()
+        if grid_button is None:
+            grid_button = dict()
+        if size_grid is None:
+            size_grid = int(len(keys)**0.5)
+            size_grid = [size_grid, size_grid+1]
+        self.title = ''
+        self.keys = keys
+        self.values = values
+        self.thanks_text = thanks_text
+        self.size_button = size_button
+        self.grid_label = grid_label
+        self.grid_button = grid_button
+        self.font_label = font_label
+        self.font_button = font_button
+        self.size_label = size_label
+        self.size_grid = size_grid
