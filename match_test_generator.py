@@ -17,6 +17,14 @@ import tkinterclasses
 
 
 def treeview_sort_column(tv, col, reverse):
+    """
+    Функция включает сортировку в Treeview по нажатию на заголовок колонки, по содержимому этой колонки
+    Enable sort in ttk.Treeview by click on heading of column, sorting by values of column
+    :param tv: tkinter.ttk.Treeview
+    :param col: number of column
+    :param reverse: boolean
+    :return: Nothing
+    """
     l = [(int(tv.set(k, col)) if col == 3 else tv.set(k, col), k) for k in tv.get_children('')]
     l.sort(reverse=reverse)
 
@@ -30,7 +38,18 @@ def treeview_sort_column(tv, col, reverse):
 
 
 class SettingsPackMatchTG:
+    """
+    Пак для настроек для MatchGenerator
+    """
+
     def __init__(self, title='Foton Test System 2023 Pro', theme='black', tests_lib=None, recent_files=None):
+        """
+        Пак для настроек для FTS23 MatchGenerator
+        :param title: название
+        :param theme: тема
+        :param tests_lib: библиотека тестов - список файлов
+        :param recent_files: последние файлы - список до 10 файлов
+        """
         self.title = title
         self.theme = theme
         if tests_lib is None:
@@ -70,8 +89,14 @@ class App(ttkthemes.ThemedTk):
         self.style.configure('TNotebook.Tab', width=20, padding=[50, 15])
         self.style.configure('lefttab.TNotebook', tabposition='wn')
         self.style.configure('lefttab.TNotebook.Tab', width=20, padding=[50, 15])
+        self.notebook.hide(1)
 
     def init_settings(self, fsn):
+        """
+        Инициализирует файл с настройками и загружает сохраненные настройки в программу
+        :param fsn: settings filename
+        :return: nothing
+        """
         self.filename_settings = fsn
         try:
             with open(self.filename_settings, 'rb') as file:
@@ -83,36 +108,73 @@ class App(ttkthemes.ThemedTk):
         self.settings_pack.tests_lib = set(self.settings_pack.tests_lib)
 
     def init_test_tab(self):
+        """
+        Создает вкладку с редактором теста
+        :return: nothing / None
+        """
+        # Главный фрейм вкладки
         self.tab_test = ttk.Frame(self.notebook)
         self.tab_test.pack(fill='both', expand=1)
-        self.notebook.add(self.tab_test, text='Редактор')
+        self.notebook.add(self.tab_test, text='Редактор')  # Добавляем вкладку к Notebook
+        # Фрейм для мета-информации теста
+        self.test_tab_tool = ttk.Frame(self.tab_test)
+        self.test_tab_tool.pack(fill='x')  # горизонтально растягиваем
+        # Надпись про название
+        self.test_tab_label_title = ttk.Label(self.test_tab_tool, text='Название')
+        self.test_tab_label_title.grid(row=0, column=0, ipadx=10, ipady=15, padx=10, pady=10)
+        # Поле ввода для названия
+        self.test_tab_entry_title = ttk.Entry(self.test_tab_tool, width=69)
+        self.test_tab_entry_title.grid(row=0, column=1, ipadx=10, ipady=15, padx=10, pady=10)
+        # Надпись про благодарность
+        self.test_tab_label_title = ttk.Label(self.test_tab_tool, text='Благодарность\nза прохождение')
+        self.test_tab_label_title.grid(row=0, column=2, ipadx=10, ipady=15, padx=10, pady=10)
+        # Текст для благодарности
+        self.test_tab_tnx_text = tk.Text(self.test_tab_tool, width=69, height=3,
+                                         relief=tk.FLAT)  # Делаем плоский рельеф для более нормального стиля
+        self.test_tab_tnx_text.grid(row=0, column=3, padx=[10, 0], pady=2,
+                                    sticky='ns')  # Делаем padx (10, 0) для того чтобы текст примыкал к скроллу
+        # Скролл для текста
+        self.test_tab_tnx_ysb = ttk.Scrollbar(self.test_tab_tool, orient=tk.VERTICAL,  # Вертикальный
+                                              command=self.test_tab_tnx_text.yview)
+        self.test_tab_tnx_ysb.grid(row=0, column=4, padx=[0, 10], pady=2,
+                                   sticky='ns')  # padx=(0,10) чтобы примыкал к тексту + прилипание север-юг чтобы растянуть сверху вниз
+        # Прикрепляем к тексту комманду изменения скролла
+        self.test_tab_tnx_text.config(yscrollcommand=self.test_tab_tnx_ysb.set)
+        # делаем panedwindow горизонтальный
         self.tab_test_paned = ttk.PanedWindow(self.tab_test, orient=tk.HORIZONTAL)
-        self.tab_test_paned.pack(fill='both', expand=1)
+        self.tab_test_paned.pack(fill='both', expand=1) # Растягиваем во все стороны
+        # Фрейм с подписью для редактора пар
         self.tab_test_lf_pairs = ttk.LabelFrame(self.tab_test_paned, text='Редактор пар')
-        self.tab_test_paned.add(self.tab_test_lf_pairs, weight=1)
+        self.tab_test_paned.add(self.tab_test_lf_pairs, weight=1) # Добавляем фрейм к panedwindow
+        # Фрейм для кнопок сверху
         self.tab_test_tool_frame = ttk.Frame(self.tab_test_lf_pairs, height=50)
-        self.tab_test_tool_frame.pack(fill='x')
+        self.tab_test_tool_frame.pack(fill='x') # Растягиваем горизонтально
+        # Кнопка для добавления пары
         self.tab_test_butt_add = ttk.Button(self.tab_test_tool_frame, text='Добавить пару')
-        self.tab_test_butt_add.place(relx=0, rely=0, anchor='nw', relwidth=0.4, relheight=1)
+        self.tab_test_butt_add.place(relx=0, rely=0, anchor='nw', relwidth=0.4, relheight=1) # прикрепляем для 4/10
+        # Кнопка для удаления пары
         self.tab_test_butt_del = ttk.Button(self.tab_test_tool_frame, text='Удалить пару')
-        self.tab_test_butt_del.place(relx=0.4, rely=0, anchor='nw', relwidth=0.4, relheight=1)
+        self.tab_test_butt_del.place(relx=0.4, rely=0, anchor='nw', relwidth=0.4, relheight=1) # Прикрепляем для еще 4/10
+        # Кнопка для изменения пары
         self.tab_test_butt_edit = ttk.Button(self.tab_test_tool_frame, text='Изменить\nпару')
-        self.tab_test_butt_edit.place(relx=0.8, rely=0, anchor='nw', relwidth=0.2, relheight=1)
+        self.tab_test_butt_edit.place(relx=0.8, rely=0, anchor='nw', relwidth=0.2, relheight=1) # Прикрепляем для последних 2/10
+        # Фрейм с надписью Пары для таблицы со скроллом
         self.test_tab_tv_frame = ttk.LabelFrame(self.tab_test_lf_pairs, text='Пары')
-        self.test_tab_tv_frame.pack(fill='both', expand=1)
-        columns = ("#1", "#2", "#3")
+        self.test_tab_tv_frame.pack(fill='both', expand=1) # Растягиваем его во все стороны
+        columns = ("#1", "#2", "#3") # начальные номера для разметки заголовков
         self.test_tab_treeview_tests = ttk.Treeview(self.test_tab_tv_frame, show="headings", columns=columns)
-        self.test_tab_treeview_tests.heading("#1", text="ID")
-        self.test_tab_treeview_tests.heading("#2", text="Ключ")
-        self.test_tab_treeview_tests.heading("#3", text="Значение")
+        self.test_tab_treeview_tests.heading("#1", text="ID") # Первый заголовок
+        self.test_tab_treeview_tests.heading("#2", text="Ключ") # Второй заголовок
+        self.test_tab_treeview_tests.heading("#3", text="Значение") # Третий заголовок
+        # Ставим вертикальный скролл для таблицы
         self.treetestysb = ttk.Scrollbar(self.test_tab_tv_frame, orient=tk.VERTICAL,
                                          command=self.test_tab_treeview_tests.yview)
-        self.test_tab_treeview_tests.configure(yscroll=self.treetestysb.set)
-        self.test_tab_treeview_tests.pack(side='left', fill='both', expand=True)
-        self.treetestysb.pack(side='right', fill='y')
-        treeview_sort_column(self.test_tab_treeview_tests, 0, False)
-        treeview_sort_column(self.test_tab_treeview_tests, 1, False)
-        treeview_sort_column(self.test_tab_treeview_tests, 2, False)
+        self.test_tab_treeview_tests.configure(yscroll=self.treetestysb.set) # Привязываем команду скролла
+        self.test_tab_treeview_tests.pack(side='left', fill='both', expand=True) # Пакуем влево с растяжкой во все стороны
+        self.treetestysb.pack(side='right', fill='y') # Пакуем справо с вертикальной растяжкой
+        treeview_sort_column(self.test_tab_treeview_tests, 0, False) # Включаем сортировку для первого столбца
+        treeview_sort_column(self.test_tab_treeview_tests, 1, False) # Включаем сортировку для второго столбца
+        treeview_sort_column(self.test_tab_treeview_tests, 2, False) # Включаем сортировку для третьего столбца
         self.tab_test_invert_frame = ttk.Frame(self.tab_test_lf_pairs, height=50)
         self.tab_test_invert_frame.pack(fill='x')
         self.tab_test_butt_i_pair = ttk.Button(self.tab_test_invert_frame, text='Инвертировать\nпару')
@@ -126,11 +188,14 @@ class App(ttkthemes.ThemedTk):
         self.tab_test_lf_examples = ttk.LabelFrame(self.tab_test_lf_el, text='Примеры')
         self.tab_test_el_paned.add(self.tab_test_lf_examples, weight=1)
 
-        self.tab_test_el_example_butt_1 = ttk.Button(self.tab_test_lf_examples, text='Пример', style='example.TButton')
+        self.tab_test_el_example_butt_1 = ttk.Button(self.tab_test_lf_examples, text='ExampleПример',
+                                                     style='example.TButton')
         self.tab_test_el_example_butt_1.grid(row=0, column=0)
-        self.tab_test_el_example_butt_2 = ttk.Button(self.tab_test_lf_examples, text='Пример', style='example.TButton')
+        self.tab_test_el_example_butt_2 = ttk.Button(self.tab_test_lf_examples, text='ExampleПример',
+                                                     style='example.TButton')
         self.tab_test_el_example_butt_2.grid(row=0, column=1)
-        self.tab_test_el_example_lab = ttk.Label(self.tab_test_lf_examples, text='Пример', style='example.TLabel')
+        self.tab_test_el_example_lab = ttk.Label(self.tab_test_lf_examples, text='ExampleПример',
+                                                 style='example.TLabel')
         self.tab_test_el_example_lab.grid(row=0, column=1, sticky='se')
 
         self.tab_test_paned_el = ttk.PanedWindow(self.tab_test_lf_el, orient=tk.HORIZONTAL)
@@ -146,45 +211,132 @@ class App(ttkthemes.ThemedTk):
         self.tab_test_el_lf_button_spinbox.grid(row=0, column=1)
         """
         # ============= Entry + Button ============== # -- FONT
-        pass
+        self.tab_test_el_lf_button_button_font = ttk.Button(self.tab_test_el_lf_button, text='Выбрать шрифт',
+                                                            command=self.choose_font_button)
+        self.tab_test_el_lf_button_button_font.grid(row=0, column=0, ipadx=10, ipady=15, padx=10, pady=10)
+        self.tab_test_el_lf_button_entry_font = ttk.Entry(self.tab_test_el_lf_button)
+        self.tab_test_el_lf_button_entry_font.grid(row=0, column=1, ipadx=10, ipady=15, padx=10, pady=10)
+        self.tab_test_el_lf_button_entry_font.insert('end', 'TkDefaultFont')
         # ============= Label + Spinbox pair ============== # --- WIDTH
         self.tab_test_el_lf_button_label_width = ttk.Label(self.tab_test_el_lf_button, text='width=')
-        self.tab_test_el_lf_button_label_width.grid(row=1, column=0)
-        self.tab_test_el_lf_button_spinbox_width = ttk.Spinbox(self.tab_test_el_lf_button, from_=0, to=100, command=self.set_spinboxes_button)
+        self.tab_test_el_lf_button_label_width.grid(row=1, column=0, ipadx=10, ipady=15, padx=10, pady=10)
+        self.tab_test_el_lf_button_spinbox_width = ttk.Spinbox(self.tab_test_el_lf_button, from_=0, to=100,
+                                                               command=self.set_spinboxes_button)
         self.tab_test_el_lf_button_spinbox_width.set(0)
-        self.tab_test_el_lf_button_spinbox_width.grid(row=1, column=1)
+        self.tab_test_el_lf_button_spinbox_width.grid(row=1, column=1, ipadx=10, padx=10, pady=10)
         # ============= Label + Spinbox pair ============== # --- IPADX
         self.tab_test_el_lf_button_label_ipadx = ttk.Label(self.tab_test_el_lf_button, text='ipadx=')
-        self.tab_test_el_lf_button_label_ipadx.grid(row=3, column=0)
-        self.tab_test_el_lf_button_spinbox_ipadx = ttk.Spinbox(self.tab_test_el_lf_button, from_=0, to=100, command=self.set_spinboxes_button)
+        self.tab_test_el_lf_button_label_ipadx.grid(row=3, column=0, ipadx=10, ipady=15, padx=10, pady=10)
+        self.tab_test_el_lf_button_spinbox_ipadx = ttk.Spinbox(self.tab_test_el_lf_button, from_=0, to=100,
+                                                               command=self.set_spinboxes_button)
         self.tab_test_el_lf_button_spinbox_ipadx.set(0)
-        self.tab_test_el_lf_button_spinbox_ipadx.grid(row=3, column=1)
+        self.tab_test_el_lf_button_spinbox_ipadx.grid(row=3, column=1, ipadx=10, padx=10, pady=10)
         # ============= Label + Spinbox pair ============== # --- IPADY
         self.tab_test_el_lf_button_label_ipady = ttk.Label(self.tab_test_el_lf_button, text='ipady=')
-        self.tab_test_el_lf_button_label_ipady.grid(row=4, column=0)
-        self.tab_test_el_lf_button_spinbox_ipady = ttk.Spinbox(self.tab_test_el_lf_button, from_=0, to=100, command=self.set_spinboxes_button)
+        self.tab_test_el_lf_button_label_ipady.grid(row=4, column=0, ipadx=10, ipady=15, padx=10, pady=10)
+        self.tab_test_el_lf_button_spinbox_ipady = ttk.Spinbox(self.tab_test_el_lf_button, from_=0, to=100,
+                                                               command=self.set_spinboxes_button)
         self.tab_test_el_lf_button_spinbox_ipady.set(0)
-        self.tab_test_el_lf_button_spinbox_ipady.grid(row=4, column=1)
+        self.tab_test_el_lf_button_spinbox_ipady.grid(row=4, column=1, ipadx=10, padx=10, pady=10)
         # ============= Label + Spinbox pair ============== # --- PADX
         self.tab_test_el_lf_button_label_padx = ttk.Label(self.tab_test_el_lf_button, text='padx=')
-        self.tab_test_el_lf_button_label_padx.grid(row=5, column=0)
-        self.tab_test_el_lf_button_spinbox_padx = ttk.Spinbox(self.tab_test_el_lf_button, from_=0, to=100, command=self.set_spinboxes_button)
+        self.tab_test_el_lf_button_label_padx.grid(row=5, column=0, ipadx=10, ipady=15, padx=10, pady=10)
+        self.tab_test_el_lf_button_spinbox_padx = ttk.Spinbox(self.tab_test_el_lf_button, from_=0, to=100,
+                                                              command=self.set_spinboxes_button)
         self.tab_test_el_lf_button_spinbox_padx.set(0)
-        self.tab_test_el_lf_button_spinbox_padx.grid(row=5, column=1)
+        self.tab_test_el_lf_button_spinbox_padx.grid(row=5, column=1, ipadx=10, padx=10, pady=10)
         # ============= Label + Spinbox pair ============== # --- PADY
         self.tab_test_el_lf_button_label_pady = ttk.Label(self.tab_test_el_lf_button, text='pady=')
-        self.tab_test_el_lf_button_label_pady.grid(row=6, column=0)
-        self.tab_test_el_lf_button_spinbox_pady = ttk.Spinbox(self.tab_test_el_lf_button, from_=0, to=100, command=self.set_spinboxes_button)
+        self.tab_test_el_lf_button_label_pady.grid(row=6, column=0, ipadx=10, ipady=15, padx=10, pady=10)
+        self.tab_test_el_lf_button_spinbox_pady = ttk.Spinbox(self.tab_test_el_lf_button, from_=0, to=100,
+                                                              command=self.set_spinboxes_button)
         self.tab_test_el_lf_button_spinbox_pady.set(0)
-        self.tab_test_el_lf_button_spinbox_pady.grid(row=6, column=1)
+        self.tab_test_el_lf_button_spinbox_pady.grid(row=6, column=1, ipadx=10, padx=10, pady=10)
         # ============= Label + Spinbox pair ============== # --- STICKY
-        self.tab_test_el_lf_button_label_sticky= ttk.Label(self.tab_test_el_lf_button, text='sticky=')
-        self.tab_test_el_lf_button_label_sticky.grid(row=7, column=0)
-        self.tab_test_el_lf_button_spinbox_sticky = ttk.Spinbox(self.tab_test_el_lf_button, command=self.set_spinboxes_button, values=['', 'n', 's', 'e', 'w', 'nw', 'ne', 'sw', 'se', 'ns', 'we', 'nse', 'nws', 'wes', 'wen', 'nsew'])
+        self.tab_test_el_lf_button_label_sticky = ttk.Label(self.tab_test_el_lf_button, text='sticky=')
+        self.tab_test_el_lf_button_label_sticky.grid(row=7, column=0, ipadx=10, ipady=15, padx=10, pady=10)
+        self.tab_test_el_lf_button_spinbox_sticky = ttk.Spinbox(self.tab_test_el_lf_button,
+                                                                command=self.set_spinboxes_button,
+                                                                values=['', 'n', 's', 'e', 'w', 'nw', 'ne', 'sw', 'se',
+                                                                        'ns', 'we', 'nse', 'nws', 'wes', 'wen', 'nsew'])
         self.tab_test_el_lf_button_spinbox_sticky.set('')
-        self.tab_test_el_lf_button_spinbox_sticky.grid(row=7, column=1)
+        self.tab_test_el_lf_button_spinbox_sticky.grid(row=7, column=1, ipadx=10, padx=10, pady=10)
         self.tab_test_el_lf_label = ttk.LabelFrame(self.tab_test_paned_el, text='Редактор подписи')
         self.tab_test_paned_el.add(self.tab_test_el_lf_label, weight=1)
+        ###################### init label edit #################
+        # ============= Entry + Button ============== # -- FONT
+        self.tab_test_el_lf_label_button_font = ttk.Button(self.tab_test_el_lf_label, text='Выбрать шрифт',
+                                                           command=self.choose_font_label)
+        self.tab_test_el_lf_label_button_font.grid(row=0, column=0, ipadx=10, ipady=15, padx=10, pady=10)
+        self.tab_test_el_lf_label_entry_font = ttk.Entry(self.tab_test_el_lf_label)
+        self.tab_test_el_lf_label_entry_font.grid(row=0, column=1, ipadx=10, ipady=15, padx=10, pady=10)
+        self.tab_test_el_lf_label_entry_font.insert('end', 'TkDefaultFont')
+        # ============= Label + Spinbox pair ============== # --- WIDTH
+        self.tab_test_el_lf_label_label_width = ttk.Label(self.tab_test_el_lf_label, text='width=')
+        self.tab_test_el_lf_label_label_width.grid(row=1, column=0, ipadx=10, ipady=15, padx=10, pady=10)
+        self.tab_test_el_lf_label_spinbox_width = ttk.Spinbox(self.tab_test_el_lf_label, from_=0, to=100,
+                                                              command=self.set_spinboxes_label)
+        self.tab_test_el_lf_label_spinbox_width.set(0)
+        self.tab_test_el_lf_label_spinbox_width.grid(row=1, column=1, ipadx=10, padx=10, pady=10)
+        # ============= Label + Spinbox pair ============== # --- IPADX
+        self.tab_test_el_lf_label_label_ipadx = ttk.Label(self.tab_test_el_lf_label, text='ipadx=')
+        self.tab_test_el_lf_label_label_ipadx.grid(row=3, column=0, ipadx=10, ipady=15, padx=10, pady=10)
+        self.tab_test_el_lf_label_spinbox_ipadx = ttk.Spinbox(self.tab_test_el_lf_label, from_=0, to=100,
+                                                              command=self.set_spinboxes_label)
+        self.tab_test_el_lf_label_spinbox_ipadx.set(0)
+        self.tab_test_el_lf_label_spinbox_ipadx.grid(row=3, column=1, ipadx=10, padx=10, pady=10)
+        # ============= Label + Spinbox pair ============== # --- IPADY
+        self.tab_test_el_lf_label_label_ipady = ttk.Label(self.tab_test_el_lf_label, text='ipady=')
+        self.tab_test_el_lf_label_label_ipady.grid(row=4, column=0, ipadx=10, ipady=15, padx=10, pady=10)
+        self.tab_test_el_lf_label_spinbox_ipady = ttk.Spinbox(self.tab_test_el_lf_label, from_=0, to=100,
+                                                              command=self.set_spinboxes_label)
+        self.tab_test_el_lf_label_spinbox_ipady.set(0)
+        self.tab_test_el_lf_label_spinbox_ipady.grid(row=4, column=1, ipadx=10, padx=10, pady=10)
+        # ============= Label + Spinbox pair ============== # --- PADX
+        self.tab_test_el_lf_label_label_padx = ttk.Label(self.tab_test_el_lf_label, text='padx=')
+        self.tab_test_el_lf_label_label_padx.grid(row=5, column=0, ipadx=10, ipady=15, padx=10, pady=10)
+        self.tab_test_el_lf_label_spinbox_padx = ttk.Spinbox(self.tab_test_el_lf_label, from_=0, to=100,
+                                                             command=self.set_spinboxes_label)
+        self.tab_test_el_lf_label_spinbox_padx.set(0)
+        self.tab_test_el_lf_label_spinbox_padx.grid(row=5, column=1, ipadx=10, padx=10, pady=10)
+        # ============= Label + Spinbox pair ============== # --- PADY
+        self.tab_test_el_lf_label_label_pady = ttk.Label(self.tab_test_el_lf_label, text='pady=')
+        self.tab_test_el_lf_label_label_pady.grid(row=6, column=0, ipadx=10, ipady=15, padx=10, pady=10)
+        self.tab_test_el_lf_label_spinbox_pady = ttk.Spinbox(self.tab_test_el_lf_label, from_=0, to=100,
+                                                             command=self.set_spinboxes_label)
+        self.tab_test_el_lf_label_spinbox_pady.set(0)
+        self.tab_test_el_lf_label_spinbox_pady.grid(row=6, column=1, ipadx=10, padx=10, pady=10)
+        # ============= Label + Spinbox pair ============== # --- STICKY
+        self.tab_test_el_lf_label_label_sticky = ttk.Label(self.tab_test_el_lf_label, text='sticky=')
+        self.tab_test_el_lf_label_label_sticky.grid(row=7, column=0, ipadx=10, ipady=15, padx=10, pady=10)
+        self.tab_test_el_lf_label_spinbox_sticky = ttk.Spinbox(self.tab_test_el_lf_label,
+                                                               command=self.set_spinboxes_label,
+                                                               values=['', 'n', 's', 'e', 'w', 'nw', 'ne', 'sw', 'se',
+                                                                       'ns', 'we', 'nse', 'nws', 'wes', 'wen', 'nsew'])
+        self.tab_test_el_lf_label_spinbox_sticky.set('se')
+        self.tab_test_el_lf_label_spinbox_sticky.grid(row=7, column=1, ipadx=10, padx=10, pady=10)
+
+    def choose_font_button(self, event=None):
+        font = self.fontchoose(default_font=self.tab_test_el_lf_button_entry_font.get())
+        self.style.configure('example.TButton', font=font)
+        self.tab_test_el_lf_button_entry_font.delete(0, 'end')
+        self.tab_test_el_lf_button_entry_font.insert('end', font)
+
+    def choose_font_label(self, event=None):
+        font = self.fontchoose(default_font=self.tab_test_el_lf_label_entry_font.get())
+        self.style.configure('example.TLabel', font=font)
+        self.tab_test_el_lf_label_entry_font.delete(0, 'end')
+        self.tab_test_el_lf_label_entry_font.insert('end', font)
+
+    def set_spinboxes_label(self, event=None):
+        self.tab_test_el_example_lab.grid(column=1, row=0,
+                                          ipadx=self.tab_test_el_lf_label_spinbox_ipadx.get(),
+                                          ipady=self.tab_test_el_lf_label_spinbox_ipady.get(),
+                                          padx=self.tab_test_el_lf_label_spinbox_padx.get(),
+                                          pady=self.tab_test_el_lf_label_spinbox_pady.get(),
+                                          sticky=self.tab_test_el_lf_label_spinbox_sticky.get(),
+                                          )
+        self.tab_test_el_example_lab.config(width=self.tab_test_el_lf_label_spinbox_width.get())
 
     def set_spinboxes_button(self, event=None):
         self.tab_test_el_example_butt_1.grid(column=0, row=0,
@@ -195,12 +347,27 @@ class App(ttkthemes.ThemedTk):
                                              sticky=self.tab_test_el_lf_button_spinbox_sticky.get(),
                                              )
         self.tab_test_el_example_butt_1.config(width=self.tab_test_el_lf_button_spinbox_width.get())
+        self.tab_test_el_example_butt_2.grid(column=1, row=0,
+                                             ipadx=self.tab_test_el_lf_button_spinbox_ipadx.get(),
+                                             ipady=self.tab_test_el_lf_button_spinbox_ipady.get(),
+                                             padx=self.tab_test_el_lf_button_spinbox_padx.get(),
+                                             pady=self.tab_test_el_lf_button_spinbox_pady.get(),
+                                             sticky=self.tab_test_el_lf_button_spinbox_sticky.get(),
+                                             )
+        self.tab_test_el_example_butt_2.config(width=self.tab_test_el_lf_button_spinbox_width.get())
+
     def commit_settings(self, event=None):
         with open(self.filename_settings, 'wb') as file:
             pickle.dump(self.settings_pack, file)
         print('settings have commited')
         self.style.configure('lefttab.TNotebook', tabposition='wn')
         self.style.configure('lefttab.TNotebook.Tab', width=20, padding=[80, 20])
+        self.style.configure('TNotebook.Tab', width=20, padding=[50, 15])
+        try:
+            self.set_spinboxes_button()
+            self.set_spinboxes_label()
+        except:
+            print('test tab wasnt initialized')
 
     def init_file_tab(self):
         self.tab_file = ttk.Frame(self.notebook)
@@ -241,13 +408,17 @@ class App(ttkthemes.ThemedTk):
         self.tab_file_tab_open_butt_lib.grid(row=1, column=0, ipadx=10, ipady=15, padx=10, pady=10, sticky='nsew')
         self.tab_file_tab_open_butt_rec = ttk.Button(self.tab_file_tab_open,
                                                      text='Последние файлы ...', command=lambda e=None: (
-            self.tab_file_vnotebook.select(self.id_recent), print(self.id_recent)))
+                self.tab_file_vnotebook.select(self.id_recent), print(self.id_recent)))
         self.tab_file_tab_open_butt_rec.grid(row=2, column=0, ipadx=10, ipady=15, padx=10, pady=10, sticky='nsew')
+
+    def create_test(self, event=None):
+        self.notebook.select(1)
+        self.test = testclasses.MatchTestPack()
 
     def init_tab_file_create_tab(self):
         self.tab_file_tab_create_butt_create = ttk.Button(self.tab_file_tab_create,
                                                           text='Создать новый пустой тест на соответствие элементов',
-                                                          command=self.fontchoose)
+                                                          command=self.create_test)
         self.tab_file_tab_create_butt_create.grid(row=0, column=0, ipadx=10, ipady=15,
                                                   padx=10, pady=10)
 
