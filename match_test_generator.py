@@ -132,15 +132,16 @@ class App(ttkthemes.ThemedTk):
         self.test_tab_tnx_text = tk.Text(self.test_tab_tool, width=33, height=3, bg='white',
                                          relief=tk.FLAT)  # Делаем плоский рельеф для более нормального стиля
         self.test_tab_tnx_text.grid(row=0, column=3, padx=[10, 0], pady=2,
-                                    sticky='ns', rowspan=2)  # Делаем padx (10, 0) для того чтобы текст примыкал к скроллу
+                                    sticky='ns',
+                                    rowspan=2)  # Делаем padx (10, 0) для того чтобы текст примыкал к скроллу
         # Скролл для текста
         self.test_tab_tnx_ysb = ttk.Scrollbar(self.test_tab_tool, orient=tk.VERTICAL,  # Вертикальный
                                               command=self.test_tab_tnx_text.yview)
-        self.test_tab_tnx_ysb.grid(row=0, column=4, padx=[0, 10], pady=2,  rowspan=2,
+        self.test_tab_tnx_ysb.grid(row=0, column=4, padx=[0, 10], pady=2, rowspan=2,
                                    sticky='ns')  # padx=(0,10) чтобы примыкал к тексту + прилипание север-юг чтобы растянуть сверху вниз
         # Прикрепляем к тексту комманду изменения скролла
         self.test_tab_tnx_text.config(yscrollcommand=self.test_tab_tnx_ysb.set)
-        self.test_tab_label_width=ttk.Label(self.test_tab_tool, text='Ширина в кнопках')
+        self.test_tab_label_width = ttk.Label(self.test_tab_tool, text='Ширина в кнопках')
         self.test_tab_label_width.grid(row=0, column=5)
         self.test_tab_label_height = ttk.Label(self.test_tab_tool, text='Высота в кнопках')
         self.test_tab_label_height.grid(row=1, column=5)
@@ -150,43 +151,47 @@ class App(ttkthemes.ThemedTk):
         self.test_tab_spinbox_height.grid(row=1, column=6)
         # делаем panedwindow горизонтальный
         self.tab_test_paned = ttk.PanedWindow(self.tab_test, orient=tk.HORIZONTAL)
-        self.tab_test_paned.pack(fill='both', expand=1) # Растягиваем во все стороны
+        self.tab_test_paned.pack(fill='both', expand=1)  # Растягиваем во все стороны
         # Фрейм с подписью для редактора пар
         self.tab_test_lf_pairs = ttk.LabelFrame(self.tab_test_paned, text='Редактор пар')
-        self.tab_test_paned.add(self.tab_test_lf_pairs, weight=1) # Добавляем фрейм к panedwindow
+        self.tab_test_paned.add(self.tab_test_lf_pairs, weight=1)  # Добавляем фрейм к panedwindow
         # Фрейм для кнопок сверху
         self.tab_test_tool_frame = ttk.Frame(self.tab_test_lf_pairs, height=50)
-        self.tab_test_tool_frame.pack(fill='x') # Растягиваем горизонтально
+        self.tab_test_tool_frame.pack(fill='x')  # Растягиваем горизонтально
         # Кнопка для добавления пары
         self.tab_test_butt_add = ttk.Button(self.tab_test_tool_frame, text='Добавить пару', command=self.add_test_pair)
-        self.tab_test_butt_add.place(relx=0, rely=0, anchor='nw', relwidth=0.4, relheight=1) # прикрепляем для 4/10
+        self.tab_test_butt_add.place(relx=0, rely=0, anchor='nw', relwidth=0.4, relheight=1)  # прикрепляем для 4/10
         # Кнопка для удаления пары
         self.tab_test_butt_del = ttk.Button(self.tab_test_tool_frame, text='Удалить пару', command=self.del_test_pair)
-        self.tab_test_butt_del.place(relx=0.4, rely=0, anchor='nw', relwidth=0.4, relheight=1) # Прикрепляем для еще 4/10
+        self.tab_test_butt_del.place(relx=0.4, rely=0, anchor='nw', relwidth=0.4,
+                                     relheight=1)  # Прикрепляем для еще 4/10
         # Кнопка для изменения пары
-        self.tab_test_butt_edit = ttk.Button(self.tab_test_tool_frame, text='Изменить\nпару', command=self.edit_test_pair)
-        self.tab_test_butt_edit.place(relx=0.8, rely=0, anchor='nw', relwidth=0.2, relheight=1) # Прикрепляем для последних 2/10
+        self.tab_test_butt_edit = ttk.Button(self.tab_test_tool_frame, text='Изменить\nпару',
+                                             command=self.edit_test_pair)
+        self.tab_test_butt_edit.place(relx=0.8, rely=0, anchor='nw', relwidth=0.2,
+                                      relheight=1)  # Прикрепляем для последних 2/10
         # Фрейм с надписью Пары для таблицы со скроллом
         self.test_tab_tv_frame = ttk.LabelFrame(self.tab_test_lf_pairs, text='Пары')
-        self.test_tab_tv_frame.pack(fill='both', expand=1) # Растягиваем его во все стороны
-        columns = ("#1", "#2", "#3") # начальные номера для разметки заголовков
+        self.test_tab_tv_frame.pack(fill='both', expand=1)  # Растягиваем его во все стороны
+        columns = ("#1", "#2", "#3")  # начальные номера для разметки заголовков
         self.test_tab_treeview_tests = ttk.Treeview(self.test_tab_tv_frame, show="headings", columns=columns)
-        self.test_tab_treeview_tests.heading("#1", text="ID") # Первый заголовок
-        self.test_tab_treeview_tests.heading("#2", text="Ключ") # Второй заголовок
-        self.test_tab_treeview_tests.heading("#3", text="Значение") # Третий заголовок
+        self.test_tab_treeview_tests.heading("#1", text="ID")  # Первый заголовок
+        self.test_tab_treeview_tests.heading("#2", text="Ключ")  # Второй заголовок
+        self.test_tab_treeview_tests.heading("#3", text="Значение")  # Третий заголовок
         # Ставим вертикальный скролл для таблицы
         self.treetestysb = ttk.Scrollbar(self.test_tab_tv_frame, orient=tk.VERTICAL,
                                          command=self.test_tab_treeview_tests.yview)
-        self.test_tab_treeview_tests.configure(yscroll=self.treetestysb.set) # Привязываем команду скролла
-        self.test_tab_treeview_tests.pack(side='left', fill='both', expand=True) # Пакуем влево с растяжкой во все стороны
-        self.treetestysb.pack(side='right', fill='y') # Пакуем справо с вертикальной растяжкой
-        treeview_sort_column(self.test_tab_treeview_tests, 0, False) # Включаем сортировку для первого столбца
-        treeview_sort_column(self.test_tab_treeview_tests, 1, False) # Включаем сортировку для второго столбца
-        treeview_sort_column(self.test_tab_treeview_tests, 2, False) # Включаем сортировку для третьего столбца
+        self.test_tab_treeview_tests.configure(yscroll=self.treetestysb.set)  # Привязываем команду скролла
+        self.test_tab_treeview_tests.pack(side='left', fill='both',
+                                          expand=True)  # Пакуем влево с растяжкой во все стороны
+        self.treetestysb.pack(side='right', fill='y')  # Пакуем справо с вертикальной растяжкой
+        treeview_sort_column(self.test_tab_treeview_tests, 0, False)  # Включаем сортировку для первого столбца
+        treeview_sort_column(self.test_tab_treeview_tests, 1, False)  # Включаем сортировку для второго столбца
+        treeview_sort_column(self.test_tab_treeview_tests, 2, False)  # Включаем сортировку для третьего столбца
         self.test_tab_treeview_tests.bind('<<TreeviewSelect>>', self.show_selected_el)
         # Фрейм для кнопок инвертирования снизу
-        self.tab_test_invert_frame = ttk.Frame(self.tab_test_lf_pairs, height=50) # Высотой 50 пикселей
-        self.tab_test_invert_frame.pack(fill='x') # Растягиваем горизонтально
+        self.tab_test_invert_frame = ttk.Frame(self.tab_test_lf_pairs, height=50)  # Высотой 50 пикселей
+        self.tab_test_invert_frame.pack(fill='x')  # Растягиваем горизонтально
         # Кнопка инвертирования пары
         self.tab_test_butt_i_pair = ttk.Button(self.tab_test_invert_frame, text='Инвертировать\nпару')
         self.tab_test_butt_i_pair.place(relx=0, rely=0, anchor='nw', relwidth=0.5, relheight=1)
@@ -338,6 +343,7 @@ class App(ttkthemes.ThemedTk):
         def dismiss():
             dlg.grab_release()
             dlg.destroy()
+
         def add_pair():
             if not e1.get() in self.test.equals.keys():
                 self.test.equals[e1.get()] = e2.get()
@@ -347,6 +353,7 @@ class App(ttkthemes.ThemedTk):
                 self.test_tab_treeview_tests.focus(ID)
                 self.test_tab_treeview_tests.selection_set(ID)
             dismiss()
+
         dlg = Toplevel(self)
         frame = ttk.Frame(dlg)
         frame.pack(fill='both', expand=1)
@@ -356,7 +363,8 @@ class App(ttkthemes.ThemedTk):
         e1.grid(row=0, column=1, columnspan=2, ipadx=10, ipady=15, padx=10, pady=10)
         e2 = ttk.Entry(frame)
         e2.grid(row=1, column=1, columnspan=2, ipadx=10, ipady=15, padx=10, pady=10)
-        ttk.Button(frame, text='Добавить', command=add_pair).grid(row=2, column=0, columnspan=2, sticky='we', ipadx=10, ipady=15, padx=10, pady=10)
+        ttk.Button(frame, text='Добавить', command=add_pair).grid(row=2, column=0, columnspan=2, sticky='we', ipadx=10,
+                                                                  ipady=15, padx=10, pady=10)
         ttk.Button(frame, text='Отмена', command=dismiss).grid(row=2, column=2, ipadx=10, ipady=15, padx=10, pady=10)
         dlg.protocol("WM_DELETE_WINDOW", dismiss)  # intercept close button
         dlg.transient(self)  # dialog window is related to main
@@ -364,6 +372,7 @@ class App(ttkthemes.ThemedTk):
         dlg.grab_set()  # ensure all input goes to our window
         dlg.resizable(0, 0)
         dlg.wait_window()  # block until window is destroyed
+
     def del_test_pair(self, event=None):
         selected = self.test_tab_treeview_tests.focus()
         selected, key, value = self.test_tab_treeview_tests.item(selected)['values']
@@ -373,9 +382,11 @@ class App(ttkthemes.ThemedTk):
     def edit_test_pair(self, event=None):
         selected = self.test_tab_treeview_tests.focus()
         selected, key, value = self.test_tab_treeview_tests.item(selected)['values']
+
         def dismiss():
             dlg.grab_release()
             dlg.destroy()
+
         def add_pair():
             if 1:
                 del self.test.equals[key]
@@ -387,6 +398,7 @@ class App(ttkthemes.ThemedTk):
                 self.test_tab_treeview_tests.focus(ID)
                 self.test_tab_treeview_tests.selection_set(ID)
             dismiss()
+
         dlg = Toplevel(self)
         frame = ttk.Frame(dlg)
         frame.pack(fill='both', expand=1)
@@ -399,7 +411,8 @@ class App(ttkthemes.ThemedTk):
         e2 = ttk.Entry(frame)
         e2.grid(row=1, column=1, columnspan=2, ipadx=10, ipady=15, padx=10, pady=10)
         e2.insert('end', value)
-        ttk.Button(frame, text='Изменить', command=add_pair).grid(row=2, column=0, columnspan=2, sticky='we', ipadx=10, ipady=15, padx=10, pady=10)
+        ttk.Button(frame, text='Изменить', command=add_pair).grid(row=2, column=0, columnspan=2, sticky='we', ipadx=10,
+                                                                  ipady=15, padx=10, pady=10)
         ttk.Button(frame, text='Отмена', command=dismiss).grid(row=2, column=2, ipadx=10, ipady=15, padx=10, pady=10)
         dlg.protocol("WM_DELETE_WINDOW", dismiss)  # intercept close button
         dlg.transient(self)  # dialog window is related to main
@@ -407,7 +420,6 @@ class App(ttkthemes.ThemedTk):
         dlg.grab_set()  # ensure all input goes to our window
         dlg.resizable(0, 0)
         dlg.wait_window()  # block until window is destroyed
-
 
     def choose_font_button(self, event=None):
         font = self.fontchoose(default_font=self.tab_test_el_lf_button_entry_font.get())
@@ -462,11 +474,9 @@ class App(ttkthemes.ThemedTk):
         except:
             print('test tab wasnt initialized')
 
-
     def _save_test_as(self, filename=''):
         self.test.title = self.test_tab_entry_title.get()
         self.test.thanks_text = self.test_tab_tnx_text.get(1.0, 'end')
-
 
     def init_file_tab(self):
         self.tab_file = ttk.Frame(self.notebook)
