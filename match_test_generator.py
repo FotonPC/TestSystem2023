@@ -10,7 +10,6 @@ import pickle
 import pack_mapqf
 import ttkthemes
 from tkinter import messagebox as msgbox
-import tkinter.messagebox
 
 import testclasses
 import tkinterclasses
@@ -87,9 +86,11 @@ class App(ttkthemes.ThemedTk):
         self.geometry('700x400+100+100')
         self.init_settings(fsn)
         self.commit_settings()
+        self.update_library()
         self.style.configure('TNotebook.Tab', width=20, padding=[50, 15])
         self.style.configure('lefttab.TNotebook', tabposition='wn')
         self.style.configure('lefttab.TNotebook.Tab', width=20, padding=[50, 15])
+        self.style.configure('large.TLabel', font='{Segoe UI} 15')
         self.notebook.hide(2)
         self.filename = ''
 
@@ -196,7 +197,8 @@ class App(ttkthemes.ThemedTk):
             self.test_tab_button_size = ttk.Button(self.test_tab_tool, text='Показать сетку кнопок',
                                                    command=self.show_table_of_buttons)
             self.test_tab_button_size.grid(row=0, column=7, ipady=15, padx=5)
-            self.test_tab_button_add_to_library = ttk.Button(self.test_tab_tool, text='Добавить в библиотеку', command=self.add_test_to_library)
+            self.test_tab_button_add_to_library = ttk.Button(self.test_tab_tool, text='Добавить в библиотеку',
+                                                             command=self.add_test_to_library)
             self.test_tab_button_add_to_library.grid(row=0, column=8, ipady=15, padx=5)
             self.test_tab_button_add_to_library.config(state='disabled')
 
@@ -212,10 +214,12 @@ class App(ttkthemes.ThemedTk):
             self.tab_test_tool_frame = ttk.Frame(self.tab_test_lf_pairs, height=50)
             self.tab_test_tool_frame.pack(fill='x')  # Растягиваем горизонтально
             # Кнопка для добавления пары
-            self.tab_test_butt_add = ttk.Button(self.tab_test_tool_frame, text='Добавить пару', command=self.add_test_pair)
+            self.tab_test_butt_add = ttk.Button(self.tab_test_tool_frame, text='Добавить пару',
+                                                command=self.add_test_pair)
             self.tab_test_butt_add.place(relx=0, rely=0, anchor='nw', relwidth=0.4, relheight=1)  # прикрепляем для 4/10
             # Кнопка для удаления пары
-            self.tab_test_butt_del = ttk.Button(self.tab_test_tool_frame, text='Удалить пару', command=self.del_test_pair)
+            self.tab_test_butt_del = ttk.Button(self.tab_test_tool_frame, text='Удалить пару',
+                                                command=self.del_test_pair)
             self.tab_test_butt_del.place(relx=0.4, rely=0, anchor='nw', relwidth=0.4,
                                          relheight=1)  # Прикрепляем для еще 4/10
             # Кнопка для изменения пары
@@ -332,8 +336,10 @@ class App(ttkthemes.ThemedTk):
             self.tab_test_el_lf_button_label_sticky.grid(row=7, column=0, ipadx=10, ipady=15, padx=10, pady=10)
             self.tab_test_el_lf_button_spinbox_sticky = ttk.Spinbox(self.tab_test_el_lf_button,
                                                                     command=self.set_spinboxes_button,
-                                                                    values=['', 'n', 's', 'e', 'w', 'nw', 'ne', 'sw', 'se',
-                                                                            'ns', 'we', 'nse', 'nws', 'wes', 'wen', 'nsew'])
+                                                                    values=['', 'n', 's', 'e', 'w', 'nw', 'ne', 'sw',
+                                                                            'se',
+                                                                            'ns', 'we', 'nse', 'nws', 'wes', 'wen',
+                                                                            'nsew'])
             self.tab_test_el_lf_button_spinbox_sticky.set('')
             self.tab_test_el_lf_button_spinbox_sticky.grid(row=7, column=1, ipadx=10, padx=10, pady=10)
             self.tab_test_el_lf_label = ttk.LabelFrame(self.tab_test_paned_el, text='Редактор подписи')
@@ -386,8 +392,10 @@ class App(ttkthemes.ThemedTk):
             self.tab_test_el_lf_label_label_sticky.grid(row=7, column=0, ipadx=10, ipady=15, padx=10, pady=10)
             self.tab_test_el_lf_label_spinbox_sticky = ttk.Spinbox(self.tab_test_el_lf_label,
                                                                    command=self.set_spinboxes_label,
-                                                                   values=['', 'n', 's', 'e', 'w', 'nw', 'ne', 'sw', 'se',
-                                                                           'ns', 'we', 'nse', 'nws', 'wes', 'wen', 'nsew'])
+                                                                   values=['', 'n', 's', 'e', 'w', 'nw', 'ne', 'sw',
+                                                                           'se',
+                                                                           'ns', 'we', 'nse', 'nws', 'wes', 'wen',
+                                                                           'nsew'])
             self.tab_test_el_lf_label_spinbox_sticky.set('se')
             self.tab_test_el_lf_label_spinbox_sticky.grid(row=7, column=1, ipadx=10, padx=10, pady=10)
 
@@ -435,9 +443,12 @@ class App(ttkthemes.ThemedTk):
         :return: nothing
         """
         self.tab_file_tab_save_entry = ttk.Entry(self.tab_file_tab_save, width=100)  # create a new entry with file name
-        self.tab_file_tab_save_entry.grid(row=0, column=0, sticky='e', padx=[10, 0], pady=10, ipadx=10, ipady=15)  # grid the entry
-        self.tab_file_tab_save_butt_se = ttk.Button(self.tab_file_tab_save, text='Сохранить', command=self.save)  # create a new save-button
-        self.tab_file_tab_save_butt_se.grid(row=0, column=1, sticky='w', padx=[0, 10], pady=10, ipadx=10, ipady=15)  # grid the button
+        self.tab_file_tab_save_entry.grid(row=0, column=0, sticky='e', padx=[10, 0], pady=10, ipadx=10,
+                                          ipady=15)  # grid the entry
+        self.tab_file_tab_save_butt_se = ttk.Button(self.tab_file_tab_save, text='Сохранить',
+                                                    command=self.save)  # create a new save-button
+        self.tab_file_tab_save_butt_se.grid(row=0, column=1, sticky='w', padx=[0, 10], pady=10, ipadx=10,
+                                            ipady=15)  # grid the button
         self.tab_file_tab_save_butt_saveas = ttk.Button(self.tab_file_tab_save,
                                                         text='Сохранить как ... в проводнике Windows',
                                                         command=self.save_as_win)  # create the button to save the file using the Windows File System
@@ -449,14 +460,18 @@ class App(ttkthemes.ThemedTk):
         Initialize the tab file library
         :return: nothing
         """
-        self.tab_file_tab_lib_tool_frame = ttk.Frame(self.tab_file_tab_lib, height=50)  # create the toolbar frame for the tab file library
+        self.tab_file_tab_lib_tool_frame = ttk.Frame(self.tab_file_tab_lib,
+                                                     height=50)  # create the toolbar frame for the tab file library
         self.tab_file_tab_lib_tool_frame.pack(fill='x')  # pack the toolbar frame horizontally
         self.tab_file_tab_lib_butt_delete = ttk.Button(self.tab_file_tab_lib_tool_frame,
-                                                       text='Удалить тест из библиотеки')  # create a button that deletes the file from the library
-        self.tab_file_tab_lib_butt_delete.place(relx=0.5, rely=0, relheight=1, relwidth=0.5, anchor='nw')  # place button
-        self.tab_file_tab_lib_butt_open = ttk.Button(self.tab_file_tab_lib_tool_frame, text='Открыть тест')  # create a button that opens test from the library
+                                                       text='Удалить тест из библиотеки', command=self.del_test_from_library)  # create a button that deletes the file from the library
+        self.tab_file_tab_lib_butt_delete.place(relx=0.5, rely=0, relheight=1, relwidth=0.5,
+                                                anchor='nw')  # place button
+        self.tab_file_tab_lib_butt_open = ttk.Button(self.tab_file_tab_lib_tool_frame,
+                                                     text='Открыть тест', command=self.launch_test_from_library)  # create a button that opens test from the library
         self.tab_file_tab_lib_butt_open.place(relx=0, rely=0, relheight=1, relwidth=0.5, anchor='nw')  # place button
-        self.tab_file_tab_lib_tv_frame = ttk.Frame(self.tab_file_tab_lib)  # create a frame for pack treeview with scrollbar
+        self.tab_file_tab_lib_tv_frame = ttk.Frame(
+            self.tab_file_tab_lib)  # create a frame for pack treeview with scrollbar
         self.tab_file_tab_lib_tv_frame.pack(fill='both', expand=1)  # pack frame
         columns = ("#1", "#2", "#3")  # define columns
         self.tab_file_tab_lib_treeview_tests = ttk.Treeview(self.tab_file_tab_lib_tv_frame, show="headings",
@@ -535,7 +550,16 @@ class App(ttkthemes.ThemedTk):
         top.wait_window()
 
     # Функция для добавления файлов в библиотеку тестов
-    def add_test_to_library(self, event=None):
+    def add_test_to_library(self, event=None, filename=None):
+        if not filename is None:
+            self.settings_pack.tests_lib.append(
+                filename) if not filename in self.settings_pack.tests_lib else 0
+            if filename in self.settings_pack.recent_file:
+                self.settings_pack.recent_file.remove(filename)
+                self.settings_pack.recent_file.append(filename)
+            self.update_recent_tab()
+            self.update_library()
+            return
         # Добавляет файл с именем из self.filename в библиотеку тестов
         self.settings_pack.tests_lib.append(self.filename) if not self.filename in self.settings_pack.tests_lib else 0
         if self.filename in self.settings_pack.recent_file:
@@ -543,6 +567,20 @@ class App(ttkthemes.ThemedTk):
             self.settings_pack.recent_file.append(self.filename)
         self.update_recent_tab()
         self.update_library()
+
+    def del_test_from_library(self, event=None, filename=None):
+        # Удаляет файл из библиотеки тестов
+        if filename is None:
+            selected = self.tab_file_tab_lib_treeview_tests.focus()
+            _, title, filename = self.tab_file_tab_lib_treeview_tests.item(selected)['values']
+        self.settings_pack.tests_lib.remove(filename)
+        self.update_library()  # обновляет список файлов в библиотеке тестов
+
+    def launch_test_from_library(self, event=None, filename=None):
+        if filename is None:
+            selected = self.tab_file_tab_lib_treeview_tests.focus()
+            _, title, filename = self.tab_file_tab_lib_treeview_tests.item(selected)['values']
+        self._open_test(filename)
 
     def show_selected_el(self, event=None):
         selected = self.test_tab_treeview_tests.focus()
@@ -700,9 +738,9 @@ class App(ttkthemes.ThemedTk):
         with open(self.filename_settings, 'wb') as file:
             pickle.dump(self.settings_pack, file)
         print('settings have commited')
-        self.style.configure('lefttab.TNotebook', tabposition='wn')
-        self.style.configure('lefttab.TNotebook.Tab', width=20, padding=[80, 20])
         self.style.configure('TNotebook.Tab', width=20, padding=[50, 15])
+        self.style.configure('lefttab.TNotebook', tabposition='wn')
+        self.style.configure('lefttab.TNotebook.Tab', width=20, padding=[50, 15])
         self.style.configure('large.TLabel', font='{Segoe UI} 15')
         try:
             self.set_spinboxes_button()
@@ -834,21 +872,18 @@ class App(ttkthemes.ThemedTk):
                 continue
             # insert test to treeview
             ID = str(id(test))
-            self.tab_file_tab_lib_treeview_tests.insert('','end', iid=ID, values=(ID, test.title, filename))
+            self.tab_file_tab_lib_treeview_tests.insert('', 'end', iid=ID, values=(ID, test.title, filename))
 
     def update_recent_tab(self, event=None):
         try:
             print(self.tab_file_tab_recent_list_of_labels)
         except:
             self.tab_file_tab_recent_list_of_labels = []
-        if self.settings_pack.recent_file is None:
-            self.settings_pack.recent_file = []
-        if self.settings_pack.recent_file[-1] in self.settings_pack.recent_file[:-1]:
-            last = self.settings_pack.recent_file.pop(-1)
-            self.settings_pack.recent_file.remove(self.settings_pack.recent_file[-1])
-            self.settings_pack.recent_file.append(last)
         while len(self.settings_pack.recent_file) > 10:
             self.settings_pack.recent_file.pop(0)
+
+        self.settings_pack.recent_file = list(set(self.settings_pack.recent_file))
+
         self.commit_settings()
         for l in self.tab_file_tab_recent_list_of_labels:
             l.destroy()
@@ -861,7 +896,8 @@ class App(ttkthemes.ThemedTk):
                 self.tab_file_tab_recent_list_of_labels.append(
                     ttk.LabelFrame(self.tab_file_tab_recent, text=title, height=60))
                 self.tab_file_tab_recent_list_of_labels[-1].pack(fill='x', pady=5, padx=10)
-                self.tab_file_tab_recent_list_of_labels[-1].bind('<Double-Button-1>', lambda event=None, fn=file: self._open_test(fn))
+                self.tab_file_tab_recent_list_of_labels[-1].bind('<Double-Button-1>',
+                                                                 lambda event=None, fn=file: self._open_test(fn))
                 self.tab_file_tab_recent_list_of_labels.append(
                     ttk.Label(self.tab_file_tab_recent_list_of_labels[-1], text=title, style='large.TLabel'))
                 self.tab_file_tab_recent_list_of_labels[-1].place(relx=0, rely=0, anchor='nw')
@@ -873,7 +909,8 @@ class App(ttkthemes.ThemedTk):
                 self.tab_file_tab_recent_list_of_labels[-1].bind('<Double-Button-1>',
                                                                  lambda event=None, fn=file: self._open_test(fn))
                 self.tab_file_tab_recent_list_of_labels.append(
-                    ttk.Button(self.tab_file_tab_recent_list_of_labels[-3], text='Добавить в библиотеку'))
+                    ttk.Button(self.tab_file_tab_recent_list_of_labels[-3], text='Добавить в библиотеку',
+                               command=lambda event=None, fn=file: self.add_test_to_library(filename=fn)))
                 self.tab_file_tab_recent_list_of_labels[-1].place(relx=1, rely=0, anchor='ne', width=200)
             except:
                 pass
@@ -881,6 +918,7 @@ class App(ttkthemes.ThemedTk):
             self.tab_file_tab_recent_list_of_labels.append(
                 ttk.Label(self.tab_file_tab_recent, text='Последних файлов нет...', style='large.TLabel'))
             self.tab_file_tab_recent_list_of_labels[-1].pack(fill='both', expand=1)
+        self.commit_settings()
 
     def change_title(self, event=None):
         self.settings_pack.title = self.settings_tab_entry_title.get()
