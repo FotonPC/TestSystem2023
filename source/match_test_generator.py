@@ -41,7 +41,7 @@ class SettingsPackMatchTG:
     Пак для настроек для MatchGenerator
     """
 
-    def __init__(self, title='Foton Test System 2023 Pro', theme='black', tests_lib=None, recent_files=None):
+    def __init__(self, title='Foton Test System 2023 Pro', theme='black', tests_lib=None, recent_file=None):
         """
         Пак для настроек для FTS23 MatchGenerator
         :param title: название
@@ -54,9 +54,9 @@ class SettingsPackMatchTG:
         if tests_lib is None:
             tests_lib = set()
         self.tests_lib = tests_lib
-        self.recent_files = recent_files
-        if self.recent_files is None:
-            self.recent_files = []
+        self.recent_file = recent_file
+        if self.recent_file is None:
+            self.recent_file = []
 
     def __str__(self):
         return f"""
@@ -103,7 +103,7 @@ class App(ttkthemes.ThemedTk):
         :return: nothing
         """
         self.filename_settings = fsn
-        if os.path.isfile(self.filename_settings):
+        if os.path.isfile(self.filename_settings) and os.path.exists(self.filename_settings):
             try:
                 # try to open the settings file
                 with open(self.filename_settings,
@@ -112,6 +112,10 @@ class App(ttkthemes.ThemedTk):
             except:
                 # creating a new settings package for app
                 self.settings_pack = SettingsPackMatchTG()
+        elif not os.path.exists(self.filename_settings):
+            self.settings_pack = SettingsPackMatchTG()
+            with open(self.filename_settings, 'wb') as file:
+                pickle.dump(self.settings_pack, file)
         else:
             # handle if settings file is directory and app can not save settings
             msgbox.showerror(title='Ошибка', message='Файл настроек не существует')
