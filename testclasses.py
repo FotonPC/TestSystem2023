@@ -176,12 +176,12 @@ class MAPQuiZ(ttk.Frame):
                 self.text.config(text=f"{len(self.keys)}/{self.clicks}")
             self.missed_els.remove(self.rightn)
             self.text.config(text=str(self.keys[self.rightn]))
-            self.buttons[ind].config(text=self.keys[ind], width=len(self.keys[ind]) + 1)
+            #self.buttons[ind].config(text=self.keys[ind], width=len(self.keys[ind]) + 1)
 
         else:
             if self.buttons[ind]['style'] != 'correct.TButton':
                 self.buttons[ind].config(style='incorrect.TButton')
-                self.buttons[ind].config(text=self.keys[ind], width=len(self.keys[ind]) + 1)
+                #self.buttons[ind].config(text=self.keys[ind], width=len(self.keys[ind]) + 1)
         self.handle_config()
 
     def prepare_img(self):
