@@ -464,11 +464,13 @@ class App(ttkthemes.ThemedTk):
                                                      height=50)  # create the toolbar frame for the tab file library
         self.tab_file_tab_lib_tool_frame.pack(fill='x')  # pack the toolbar frame horizontally
         self.tab_file_tab_lib_butt_delete = ttk.Button(self.tab_file_tab_lib_tool_frame,
-                                                       text='Удалить тест из библиотеки', command=self.del_test_from_library)  # create a button that deletes the file from the library
+                                                       text='Удалить тест из библиотеки',
+                                                       command=self.del_test_from_library)  # create a button that deletes the file from the library
         self.tab_file_tab_lib_butt_delete.place(relx=0.5, rely=0, relheight=1, relwidth=0.5,
                                                 anchor='nw')  # place button
         self.tab_file_tab_lib_butt_open = ttk.Button(self.tab_file_tab_lib_tool_frame,
-                                                     text='Открыть тест', command=self.launch_test_from_library)  # create a button that opens test from the library
+                                                     text='Открыть тест',
+                                                     command=self.launch_test_from_library)  # create a button that opens test from the library
         self.tab_file_tab_lib_butt_open.place(relx=0, rely=0, relheight=1, relwidth=0.5, anchor='nw')  # place button
         self.tab_file_tab_lib_tv_frame = ttk.Frame(
             self.tab_file_tab_lib)  # create a frame for pack treeview with scrollbar
@@ -546,11 +548,11 @@ class App(ttkthemes.ThemedTk):
         top.transient(self)  # dialog window is related to main
         top.wait_visibility()  # can't grab until window appears, so we wait
         top.grab_set()  # ensure all input goes to our window
-        top.resizable(0, 0)
+        top.resizable(False, False)
         top.wait_window()
 
     # Функция для добавления файлов в библиотеку тестов
-    def add_test_to_library(self, event=None, filename=None):
+    def add_test_to_library(self, event = None, filename=None):
         if not filename is None:
             self.settings_pack.tests_lib.append(
                 filename) if not filename in self.settings_pack.tests_lib else 0
