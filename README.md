@@ -5,7 +5,7 @@ Ready programs:
 -----
 1. **MapQuizGenerator** *(map_quiz_generator_2.0.py)*
 2. **MatchTestGenerator** *(match_test_generator.py)*
-3. **QuizTester** *(quiz_tester.py)* (for testing Map-Quizzes)
+3. **QuizTester** *(quiz_tester.py)*
 
 -----------------------------------------------
 Links:
