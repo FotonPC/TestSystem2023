@@ -7,7 +7,7 @@ block_cipher = None
 a = Analysis(
     ['map_quiz_generator_2.0.py'],
     pathex=[],
-    binaries=[],
+    binaries=[('icon_mq_fts.ico', '.')],
     datas=[],
     hiddenimports=[],
     hookspath=[],
@@ -41,4 +41,5 @@ exe = EXE(
     target_arch=None,
     codesign_identity=None,
     entitlements_file=None,
+    icon=['icon_mq_fts.ico'],
 )

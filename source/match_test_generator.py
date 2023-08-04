@@ -1,4 +1,5 @@
 import os
+import sys
 import pygame
 import random
 import tkinter as tk
@@ -13,6 +14,15 @@ from tkinter import messagebox as msgbox
 
 import testclasses
 import tkinterclasses
+
+
+def resource_path(relative_path):
+    try:
+        base_path = sys._MEIPASS
+    except:
+        base_path = os.path.abspath(".")
+
+    return os.path.join(base_path, relative_path)
 
 
 def treeview_sort_column(tv, col, reverse):
@@ -69,11 +79,12 @@ class SettingsPackMatchTG:
 
 class App(ttkthemes.ThemedTk):
     def __init__(self, title='FTS23 MatchT Generator', fsn='.fotontestsystem2023matchtestgeneratorsettingsfile1.sys',
-                 theme='black'):
+                 theme='black', fn_icon='icon.ico'):
         super().__init__()
         self.title(title)
         self.set_theme(theme)
         self.init_settings(fsn)
+        self.iconbitmap(fn_icon)
         self.style = ttkthemes.ThemedStyle()
         self.mainframe = ttk.Frame(self)
         self.mainframe.pack(fill='both', expand=1)
@@ -556,7 +567,7 @@ class App(ttkthemes.ThemedTk):
         top.wait_window()
 
     # Функция для добавления файлов в библиотеку тестов
-    def add_test_to_library(self, event = None, filename=None):
+    def add_test_to_library(self, event=None, filename=None):
         if not filename is None:
             self.settings_pack.tests_lib.append(
                 filename) if not filename in self.settings_pack.tests_lib else 0
@@ -955,4 +966,4 @@ class App(ttkthemes.ThemedTk):
 
 
 if __name__ == '__main__':
-    App().mainloop()
+    App(fn_icon=resource_path('icon_mt_fts.ico')).mainloop()

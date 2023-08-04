@@ -11,9 +11,9 @@ Description for products
 Ready programs (binary) for Windows
 ----
 
-1. MatchTestGenerator.exe
-2. MapQuizGenerator.exe
-3. QuizTester.exe
+1. MatchTestGenerator2.exe
+2. MapQuizGenerator2.exe
+3. QuizTester2.exe
 
 -----------------------------
 Ready programs on Python (in directory Source)
@@ -30,7 +30,8 @@ Ready tests (in directory Testes)
 1. 50 USA States - *states50usa.fts23v2* - (test on Russian)
 2. Prefectures of Japan - *prefectures_japan.fts23v2* - (test on Russian)
 3. Regions of Russia - *rus_subjects.fts23v2* - (test on Russian)
-4. Hiragana (test on Russian)
+4. Regions of Ukraine and regions of Kazakhstan
+5. Hiragana (test on Russian)
     1) From Japanese to Russian sounds - *Hiragana(Jpn-7Rus).fts23m*
     2) From Russian sounds to Japanese - *Hiragana(Rus-7Jpn).fts23m*
 

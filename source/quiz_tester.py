@@ -1,4 +1,5 @@
 import os
+import sys
 import pygame
 import random
 import tkinter as tk
@@ -13,6 +14,15 @@ from tkinter import messagebox as msgbox
 import tkinter.messagebox
 
 import testclasses
+
+
+def resource_path(relative_path):
+    try:
+        base_path = sys._MEIPASS
+    except Exception:
+        base_path = os.path.abspath(".")
+
+    return os.path.join(base_path, relative_path)
 
 
 def treeview_sort_column(tv, col, reverse):
@@ -47,11 +57,12 @@ class SettingsPack:
 
 class App(ttkthemes.ThemedTk):
     def __init__(self, title='Foton Test System 2023 Pro', fsn='.fotontestsystem2023mainapptestersettingsfile1.sys',
-                 theme='black'):
+                 theme='black', fn_icon='icon_qt_fts.ico', **kwargs):
         super().__init__()
         self.title(title)
         self.set_theme(theme)
         self.init_settings(fsn)
+        self.iconbitmap(fn_icon)
         self.style = ttkthemes.ThemedStyle()
         self.mainframe = ttk.Frame(self)
         self.mainframe.pack(fill='both', expand=1)
@@ -124,7 +135,7 @@ class App(ttkthemes.ThemedTk):
             msgbox.showerror('Ошибка', 'Ошибка при считывании файла, либо открытия, либо загрузки файла')
 
         if filename.endswith('.fts23v2'):
-            #if 1:
+            # if 1:
             try:
                 self.test = testclasses.MAPQuiZ(self.mainframe, packq=pack, root=self, close_handle=self.on_close_test)
                 self.test.place(relx=0, rely=0, anchor='nw', relheight=1, relwidth=1)
@@ -133,12 +144,12 @@ class App(ttkthemes.ThemedTk):
                 msgbox.showerror('Ошибка', f'Ошибка при создании теста, видимо данные упакованы не в том формате\n{e}')
         elif filename.endswith('.fts23m'):
             if 1:
-            #try:
+                # try:
                 self.test = testclasses.TNABaseUG(self.mainframe, packm=pack, root=self,
                                                   close_handle=self.on_close_test)
                 self.test.place(relx=0, rely=0, anchor='nw', relheight=1, relwidth=1)
                 self.test.start()
-            #except Exception as e:
+            # except Exception as e:
             #    msgbox.showerror('Ошибка', f'Ошибка при создании теста, видимо данные упакованы не в том формате\n{e}')
 
     def commit_settings(self, event=None):
@@ -201,4 +212,4 @@ class App(ttkthemes.ThemedTk):
 
 
 if __name__ == '__main__':
-    App().mainloop()
+    App(fn_icon=resource_path('icon_qt_fts.ico')).mainloop()

@@ -9,12 +9,23 @@ import pickle
 import pack_mapqf
 import ttkthemes
 from tkinter import messagebox as msgbox
+import sys
+
+def resource_path(relative_path):
+    try:
+        base_path = sys._MEIPASS
+    except Exception:
+        base_path = os.path.abspath(".")
+
+    return os.path.join(base_path, relative_path)
+
 
 class App(ttkthemes.ThemedTk):
-    def __init__(self, title='MapQuizGenerator', version=1.0, theme='black', filename_settings=''):
+    def __init__(self, title='MapQuizGenerator', version=1.0, theme='black', filename_settings='', fn_icon='icon.ico', *args, **kwargs):
         super().__init__()
         self.geometry('1000x300+100+100')
         self.fsn = filename_settings
+        self.iconbitmap(fn_icon)
         self.title(title + ' v' + str(version))
         self.set_theme(theme, 1, 1)
         self.mainframe = ttk.Frame(self)
@@ -272,4 +283,4 @@ if __name__ == '__main__':
     except:
         with open(fsn, 'w+') as file:
             file.write(theme)
-    App(version=2.0, theme=theme, filename_settings = fsn).mainloop()
+    App(version=2.0, theme=theme, filename_settings=fsn, fn_icon=resource_path('icon_mq_fts.ico')).mainloop()

@@ -7,7 +7,7 @@ block_cipher = None
 a = Analysis(
     ['quiz_tester.py'],
     pathex=[],
-    binaries=[],
+    binaries=[('icon_qt_fts.ico', '.')],
     datas=[],
     hiddenimports=[],
     hookspath=[],
@@ -41,4 +41,5 @@ exe = EXE(
     target_arch=None,
     codesign_identity=None,
     entitlements_file=None,
+    icon=['icon_qt_fts.ico'],
 )
